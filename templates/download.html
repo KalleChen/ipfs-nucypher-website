@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Download Your file from ipfs</h1>
+<a class="m10" href="/">Upload file</a>
+<form name="upload_form" method=get enctype=multipart/form-data>
+  <div class="flex-container">
+    <div class="m10">
+      <label for="file">Your upload file hash</label>
+      <input type=text name=file_hash >
+    </div>
+  </div>
+  <button class="m10" onclick="submit_form()">Submit</button>
+</form>
+{% if file_url %}
+<button class"m10">
+  <a href="{{ file_url }}" download >download</a>
+</button>
+{% endif %}
+{% if error %}
+  <p class="m10" style="color:red">{{ error }}</p>
+{% endif %}
+{% endblock %}
