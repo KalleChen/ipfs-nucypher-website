@@ -6,6 +6,7 @@ from encrypt import encrypt_file
 from decrypt import decrypt_file
 
 UPLOAD_FOLDER = "./files"
+PUBLIC_IP = "http://172.20.10.3:8080"
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -39,9 +40,7 @@ def download():
             ipfs_hash = request.values["file_hash"]
             if not ipfs_hash:
                 return render_template("download.html")
-            file_name = decrypt_file(
-                f"http://172.20.10.3:8080/ipfs/{ipfs_hash}"
-            )
+            file_name = decrypt_file(f"{PUBLIC_IP}/ipfs/{ipfs_hash}")
             return render_template(
                 "download.html",
                 file_url=url_for("download_file", filename=file_name),

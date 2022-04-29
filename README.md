@@ -8,6 +8,8 @@ mkdir ipfs files crypto
 docker compose up -d
 ```
 
+### !!! Your will need to modify your own public ip in app.py:9 due to python request issue !!!
+
 Flask website is hosted on http://0.0.0.0:3000
 
 IPFS webUI is hosted on http://0.0.0.0:5001/webui
