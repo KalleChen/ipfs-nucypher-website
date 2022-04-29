@@ -1,6 +1,9 @@
 import os
-from flask import Flask, render_template, request
+import shutil
+from flask import Flask, render_template, request, url_for, send_from_directory
 from ipfs import upload_ipfs
+from encrypt import encrypt_file
+from decrypt import decrypt_file
 
 UPLOAD_FOLDER = "./files"
 
@@ -18,8 +21,10 @@ def index():
                 print(file)
                 file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
                 file.save(file_path)
-                ipfs_hash = upload_ipfs(file_path, filename)
-                os.remove(file_path)
+                encrypt_file(file_path, filename)
+                ipfs_hash = upload_ipfs()
+                shutil.rmtree("files")
+                os.mkdir("files")
                 return render_template("index.html", ipfs_hash=ipfs_hash)
     except Exception as e:
         print(e)
@@ -34,14 +39,22 @@ def download():
             ipfs_hash = request.values["file_hash"]
             if not ipfs_hash:
                 return render_template("download.html")
+            file_name = decrypt_file(
+                f"http://172.20.10.3:8080/ipfs/{ipfs_hash}"
+            )
             return render_template(
                 "download.html",
-                file_url=f"http://0.0.0.0:8080/ipfs/{ipfs_hash}",
+                file_url=url_for("download_file", filename=file_name),
             )
         return render_template("download.html")
     except Exception as e:
         print(e)
         return render_template("download.html", error=str(e))
+
+
+@app.route("/download/<filename>")
+def download_file(filename):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
 if __name__ == "__main__":

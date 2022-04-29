@@ -18,9 +18,11 @@ services:
 
   web:
     build: .
+    container_name: web
     ports:
       - "3000:5000"
     volumes:
       - .:/code
     environment:
       - PYTHONUNBUFFERED=1
+    command: bash -c "python generate_key.py && python app.py"
