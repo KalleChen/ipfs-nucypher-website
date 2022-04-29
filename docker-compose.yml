@@ -1,0 +1,26 @@
+version: "2.1"
+
+services:
+  ipfs:
+    image: lscr.io/linuxserver/ipfs
+    container_name: ipfs
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./ipfs:/config
+    ports:
+      - 80:80
+      - 4001:4001
+      - 5001:5001
+      - 8080:8080
+
+  web:
+    build: .
+    ports:
+      - "3000:5000"
+    volumes:
+      - .:/code
+    environment:
+      - PYTHONUNBUFFERED=1

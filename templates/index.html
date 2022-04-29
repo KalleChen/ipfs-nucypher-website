@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Upload Your file to ipfs</h1>
+<form name="upload_form" method=post enctype=multipart/form-data>
+  <div class="flex-container">
+    <div class="m10">
+      <label for="file">Your upload file</label>
+      <input type=file name=upload_file >
+    </div>
+  </div>
+  <button class="m10" onclick="submit_form()">Upload</button>
+</form>
+{% if ipfs_hash %}
+  <p class="m10">{{ ipfs_hash }}</p>
+{% endif %}
+{% if error %}
+  <p class="m10" style="color:red">{{ error }}</p>
+{% endif %}
+{% endblock %}
