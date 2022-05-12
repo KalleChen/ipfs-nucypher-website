@@ -15,13 +15,13 @@ with open("crypto/alices_pk.txt", "rb") as f:
 with open("crypto/bob_sk.txt", "rb") as f:
     bob_private_key = SecretKey._from_exact_bytes(f.read())
 
-kfrags = []
-for i in range(3):
-    with open("crypto/kfrag{}.txt".format(i), "rb") as f:
-        kfrags.append(VerifiedKeyFrag.from_verified_bytes(f.read()))
-
 
 def decrypt_file(file_url):
+    kfrags = []
+    for i in range(3):
+        with open("crypto/kfrag{}.txt".format(i), "rb") as f:
+            kfrags.append(VerifiedKeyFrag.from_verified_bytes(f.read()))
+
     res = requests.get(file_url)
     print(res.content)
     with open("download.zip", "wb") as f:
